@@ -15,9 +15,10 @@
 
 发包前建议先完成这几项检查：
 
-1. 更新 [pyproject.toml](../pyproject.toml) 中的 `[project].version`
+1. 先核对包仓库里已经发布的最新版本，再更新 [pyproject.toml](../pyproject.toml) 中的 `[project].version`，避免重复发布已有版本或把版本号回退
 2. 确认 `README.md`、`docs/`、`examples/` 中对外描述与版本一致
 3. 运行测试与静态检查，避免把不可用版本发布到包仓库
+4. 在当前仓库里做本地开发时直接执行 `uv sync`，不要在本仓库内执行 `uv add fastmcp-openapi==<version>` 给自己添加自依赖
 
 ## 构建分发包
 
@@ -97,13 +98,24 @@ PY
 
 ## 发布后验证
 
-发布完成后，建议在一个全新虚拟环境里验证安装：
+发布完成后，建议分两步验证：
+
+1. 先在 PyPI 项目页确认新版本已经可见
+2. 再在一个全新虚拟环境里验证安装
+
+如果项目默认使用镜像源，还要额外确认镜像已经同步；PyPI 已可见不代表镜像已经立即可见。
 
 ```bash
 python -m venv /tmp/fastmcp-openapi-release-verify
 source /tmp/fastmcp-openapi-release-verify/bin/activate
 pip install fastmcp-openapi==<version>
 python -c "import fastmcp_openapi; print(fastmcp_openapi.__file__)"
+```
+
+如果镜像尚未同步，可以临时直连官方 PyPI 验证安装：
+
+```bash
+pip install -i https://pypi.org/simple fastmcp-openapi==<version>
 ```
 
 如果还希望校验 README 示例能否正常导入，可以继续执行：
@@ -115,6 +127,8 @@ python -c "from fastmcp_openapi import FastMCPOpenAPI; print(FastMCPOpenAPI)"
 ## 当前仓库的注意点
 
 - 版本号以 [pyproject.toml](../pyproject.toml) 中的 `[project].version` 为准
+- 当前仓库的 `requires-python` 是 `>=3.13,<3.15`，锁文件也会按这个范围做解析；如果未来上游依赖尚未支持新 Python 小版本，先收紧版本范围再锁定，避免 `uv add` 或 `uv lock` 在非当前解释器版本上失败
 - 项目使用 `src/` 布局，发包时实际包含的是 `src/fastmcp_openapi`
-- 依赖解析默认配置了阿里云镜像用于安装依赖，但这不等同于发布目标仓库
+- 依赖解析默认配置了阿里云镜像用于安装依赖，但这不等同于发布目标仓库；发布成功后还要考虑镜像同步延迟
+- 在本仓库中执行 `uv add fastmcp-openapi==<version>` 会把当前项目当成外部依赖重新解析，既没有必要，也容易因为镜像未同步或版本重复而误判为发包失败
 - 如果后续补充 GitHub Actions 或其他发布流水线，建议同步更新本文件，避免文档与实际流程不一致
