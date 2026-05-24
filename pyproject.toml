@@ -1,0 +1,213 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "fastmcp-openapi"
+version = "0.0.1"
+description = "OpenAPI documentation and helper decorators for FastMCP servers"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "fastmcp>=2.0",
+    "pydantic>=2.13.1",
+    "starlette>=0.50.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/fastmcp_openapi"]
+
+[dependency-groups]
+dev = [
+    "autoflake>=2.3.3",
+    "bandit[toml]>=1.9.4",
+    "black>=26.3.1",
+    "codespell[toml]>=2.4.2",
+    "commitizen",
+    "flake8>=7.3.0",
+    "flake8-bugbear>=25.11.29",
+    "flake8-pyproject>=1.2.4",
+    "isort>=8.0.1",
+    "mock>=5.2.0",
+    "mypy>=1.20.1",
+    "poethepoet>=0.37.0",
+    "pre-commit>=4.5.1",
+    "pylint>=4.0.5",
+    "pytest>=9.0.3",
+    "pytest-cov>=7.1.0",
+    "pytest-xdist>=3.8.0",
+    "pyupgrade>=3.21.2",
+    "ruff>=0.15.11",
+    "vulture>=2.16",
+]
+
+[tool.poe]
+include_script = "bin.poe_tasks:generate_poe_config"
+
+[[tool.uv.index]]
+url = "https://mirrors.aliyun.com/pypi/simple"
+default = true
+
+[tool.pylint]
+ignore-patterns = ["tests"]
+disable = [
+  "redefined-outer-name",
+  "unused-argument",
+  "redefined-builtin",
+  "wrong-import-order",
+  "unused-variable",
+  "too-many-statements",
+  "ungrouped-imports",
+  "use-list-literal",
+  "super-init-not-called",
+  "consider-using-with",
+]
+
+[tool.pylint.master]
+ignore = ["tests"]
+job = 0
+extension-pkg-whitelist = "pydantic"
+
+[tool.pylint.format]
+max-line-length = 120
+
+[tool.pylint.similarities]
+ignore-imports = "yes"
+
+[tool.pylint.basic]
+argument-naming-style = "any"
+attr-naming-style = "any"
+function-naming-style = "any"
+method-naming-style = "any"
+variable-naming-style = "any"
+
+[tool.pylint.message_control]
+disable = [
+  "duplicate-code",
+  "missing-docstring",
+  "logging-fstring-interpolation",
+  "superfluous-parens",
+  "broad-except",
+  "unnecessary-lambda",
+  "use-dict-literal",
+]
+enable = ["redefined-outer-name", "deprecated-method"]
+
+[tool.pylint.design]
+min-public-methods = 0
+max-args = 7
+max-positional-arguments = 8
+
+[tool.mypy]
+plugins = "pydantic.mypy"
+ignore_missing_imports = true
+mypy_path = "mystubs"
+exclude = []
+
+[[tool.mypy.overrides]]
+module = ["src.*", "tests.*", "bin.*"]
+disallow_untyped_defs = true
+
+[tool.pytest.ini_options]
+addopts = " -svv"
+minversion = "6.0"
+testpaths = ["tests"]
+filterwarnings = [
+  "ignore::DeprecationWarning:sentry_dramatiq",
+  "ignore::SyntaxWarning:oss2",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+  "pragma: no cover",
+  "def __repr__",
+  "if __name__ == .__main__.:",
+]
+show_missing = true
+skip_covered = true
+skip_empty = true
+sort = "miss"
+
+[tool.coverage.path]
+source = "src"
+
+[tool.black]
+target-version = ['py313']
+line-length = 120
+
+[tool.isort]
+multi_line_output = 3
+include_trailing_comma = true
+line_length = 120
+force_grid_wrap = 0
+profile = "black"
+use_parentheses = true
+known_first_party = ["src", "tests"]
+
+[tool.flake8]
+ignore = ['B008', 'W503', 'E203', 'B042']
+max-line-length = 120
+max-complexity = 12
+exclude = ['.git', '__pycache__', '.mypy_cache', '.pytest_cache', 'examples/demo_server.py']
+extend-immutable-calls = []
+
+[tool.ruff]
+line-length = 120
+exclude = [".git", ".venv"]
+target-version = "py313"
+
+[tool.ruff.lint]
+extend-select = ["I"]
+select = ["E", "F", "B", "R"]
+ignore = ["E501"]
+fixable = ["ALL"]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = [
+  "F401", # unused-import
+  "I001", # unsorted-imports. Import block is un-sorted or un-formatted
+]
+"tests/**/*.py" = [
+  "F401", # unused-import
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["src", "tests"]
+
+[tool.ruff.lint.flake8-bugbear]
+extend-immutable-calls = []
+
+[tool.bandit]
+exclude_dirs = [
+  '.git',
+  '__pycache__',
+  '.mypy_cache',
+  '.pytest_cache',
+  'examples/demo_server.py',
+]
+skips = ['B110', 'B311', 'B105', 'B106', 'B403', 'B413', 'B301']
+
+[tool.bandit.assert_used]
+skips = ['./tests/*', 'tests/*', '*_test.py', '*test_*.py']
+
+[tool.commitizen]
+annotated_tag = true
+changelog_incremental = true
+tag_format = "v$version"
+update_changelog_on_bump = true
+version = "9.14.3"
+
+[tool.codespell]
+skip = '.git*,*.svg,*.lock,*.css,pyproject.toml,.venv,.mypy_cache,.pytest_cache,__pycache__'
+check-hidden = true
+ignore-regex = '\bla vie\b'
+ignore-words-list = 'ans'
+
+[tool.vulture]
+exclude = ["dos/", "examples/", ".venv/", ".git/"]
+ignore_decorators = ["@openapi.tool", "@mcp.custom_route"]
+ignore_names = []
+make_whitelist = true
+min_confidence = 60
+sort_by_size = true
+verbose = false

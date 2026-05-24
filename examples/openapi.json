@@ -1,0 +1,393 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Demo MCP Tools API",
+    "version": "1.0.0",
+    "description": "Demo FastMCP OpenAPI docs"
+  },
+  "paths": {
+    "/call/list_items": {
+      "get": {
+        "description": "获取活动中的商品列表。<br/>指定活动，获取活动中的商品列表。",
+        "operationId": "list_items_call_list_items_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$defs": {
+                    "DemoItem": {
+                      "properties": {
+                        "num_id": {
+                          "title": "Num Id",
+                          "type": "string"
+                        },
+                        "title": {
+                          "title": "Title",
+                          "type": "string"
+                        },
+                        "price": {
+                          "title": "Price",
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "num_id",
+                        "title",
+                        "price"
+                      ],
+                      "title": "DemoItem",
+                      "type": "object"
+                    }
+                  },
+                  "properties": {
+                    "message": {
+                      "description": "接口错误信息",
+                      "title": "Message",
+                      "type": "string"
+                    },
+                    "request_id": {
+                      "description": "请求ID",
+                      "title": "Request Id",
+                      "type": "string"
+                    },
+                    "code": {
+                      "description": "接口错误码",
+                      "title": "Code",
+                      "type": "integer"
+                    },
+                    "data": {
+                      "anyOf": [
+                        {
+                          "items": {
+                            "$ref": "#/$defs/DemoItem"
+                          },
+                          "type": "array"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "default": null,
+                      "description": "接口返回数据",
+                      "title": "Data"
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "code"
+                  ],
+                  "title": "BaseResponse[list[DemoItem]]",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ValidationErrorModel"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "获取活动中的商品列表",
+        "tags": [
+          "Tools"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "default": ""
+                  }
+                }
+              }
+            }
+          },
+          "required": false
+        }
+      }
+    },
+    "/call/item_add": {
+      "get": {
+        "description": "往活动中添加商品。<br/>指定活动，添加需要的商品，可自定义文字和标签。",
+        "operationId": "item_add_call_item_add_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$defs": {
+                    "ActCount": {
+                      "properties": {
+                        "dealing": {
+                          "description": "待处理的商品数",
+                          "title": "Dealing",
+                          "type": "integer"
+                        },
+                        "rendered": {
+                          "description": "渲染中的商品数",
+                          "title": "Rendered",
+                          "type": "integer"
+                        },
+                        "applied": {
+                          "default": 0,
+                          "description": "已应用的商品数",
+                          "title": "Applied",
+                          "type": "integer"
+                        },
+                        "fail": {
+                          "default": 0,
+                          "description": "应用失败的商品数",
+                          "title": "Fail",
+                          "type": "integer"
+                        },
+                        "removed": {
+                          "default": 0,
+                          "description": "已移除的商品数",
+                          "title": "Removed",
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "dealing",
+                        "rendered"
+                      ],
+                      "title": "ActCount",
+                      "type": "object"
+                    },
+                    "ActInfo": {
+                      "properties": {
+                        "id": {
+                          "description": "活动ID",
+                          "title": "Id",
+                          "type": "string"
+                        },
+                        "name": {
+                          "description": "活动显示名称",
+                          "title": "Name",
+                          "type": "string"
+                        },
+                        "count": {
+                          "$ref": "#/$defs/ActCount",
+                          "description": "活动占用的商品数"
+                        },
+                        "thumbnail": {
+                          "default": "",
+                          "description": "活动缩略图",
+                          "title": "Thumbnail",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "count"
+                      ],
+                      "title": "ActInfo",
+                      "type": "object"
+                    },
+                    "ItemActData": {
+                      "properties": {
+                        "act": {
+                          "$ref": "#/$defs/ActInfo",
+                          "description": "活动信息"
+                        }
+                      },
+                      "required": [
+                        "act"
+                      ],
+                      "title": "ItemActData",
+                      "type": "object"
+                    },
+                    "ItemAddData": {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/$defs/ItemActData",
+                          "description": "添加商品后的活动信息"
+                        }
+                      },
+                      "required": [
+                        "data"
+                      ],
+                      "title": "ItemAddData",
+                      "type": "object"
+                    }
+                  },
+                  "properties": {
+                    "message": {
+                      "description": "接口错误信息",
+                      "title": "Message",
+                      "type": "string"
+                    },
+                    "request_id": {
+                      "description": "请求ID",
+                      "title": "Request Id",
+                      "type": "string"
+                    },
+                    "code": {
+                      "description": "接口错误码",
+                      "title": "Code",
+                      "type": "integer"
+                    },
+                    "data": {
+                      "anyOf": [
+                        {
+                          "$ref": "#/$defs/ItemAddData"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "default": null,
+                      "description": "接口返回数据"
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "code"
+                  ],
+                  "title": "BaseResponse[ItemAddData]",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ValidationErrorModel"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "往活动中添加商品",
+        "tags": [
+          "Tools"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ItemAddInput"
+              }
+            }
+          },
+          "required": true
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ItemAddInput": {
+        "properties": {
+          "aid": {
+            "description": "活动ID",
+            "title": "Aid",
+            "type": "string"
+          },
+          "itemIds": {
+            "description": "待添加商品的 num_id 列表",
+            "items": {
+              "type": "string"
+            },
+            "title": "Itemids",
+            "type": "array"
+          }
+        },
+        "required": [
+          "aid",
+          "itemIds"
+        ],
+        "title": "ItemAddInput",
+        "type": "object"
+      },
+      "ValidationErrorModel": {
+        "properties": {
+          "type": {
+            "description": "A computer-readable identifier of the error type.",
+            "title": "Error Type",
+            "type": "string"
+          },
+          "loc": {
+            "description": "The error's location as a list.",
+            "items": {},
+            "title": "Location",
+            "type": "array"
+          },
+          "msg": {
+            "description": "A human readable explanation of the error.",
+            "title": "Message",
+            "type": "string"
+          },
+          "input": {
+            "description": "The input provided for validation.",
+            "title": "Input"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "The URL to further information about the error.",
+            "title": "URL"
+          },
+          "ctx": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "An optional object which contains values required to render the error message.",
+            "title": "Error context"
+          }
+        },
+        "required": [
+          "type",
+          "loc",
+          "msg",
+          "input"
+        ],
+        "title": "ValidationErrorModel",
+        "type": "object"
+      }
+    },
+    "securitySchemes": null
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:8333",
+      "description": "MCP Server"
+    }
+  ]
+}

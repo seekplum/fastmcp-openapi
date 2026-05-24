@@ -1,0 +1,41 @@
+repos:
+  - repo: local
+    hooks:
+      - id: commitizen
+        name: commitizen check
+        entry: uv run cz check
+        args: [--allow-abort, --commit-msg-file]
+        stages: [commit-msg]
+        language: system
+        require_serial: false
+
+      - id: lint-codespell
+        name: lint-codespell
+        entry: uv run poe lint-codespell
+        language: system
+        pass_filenames: true
+        require_serial: false
+
+      - id: lint-mypy
+        name: lint-mypy
+        entry: uv run poe lint-mypy
+        language: system
+        pass_filenames: false
+        require_serial: false
+        types_or: [python, pyi]
+
+      - id: lint-ruff
+        name: lint-ruff
+        entry: uv run poe lint-ruff
+        language: system
+        pass_filenames: true
+        require_serial: false
+        types_or: [python, pyi]
+
+      - id: format
+        name: format
+        entry: uv run poe format
+        language: system
+        pass_filenames: false
+        require_serial: false
+        types_or: [python, pyi]
