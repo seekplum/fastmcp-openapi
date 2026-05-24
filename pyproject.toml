@@ -4,14 +4,14 @@ build-backend = "hatchling.build"
 
 [project]
 name = "fastmcp-openapi"
-version = "0.0.1"
+version = "0.0.2"
 description = "OpenAPI documentation and helper decorators for FastMCP servers"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.13,<3.15"
 dependencies = [
     "fastmcp>=2.0",
     "pydantic>=2.13.1",
-    "starlette>=0.50.0",
+    "starlette>=0.50.0"
 ]
 
 [tool.hatch.build.targets.wheel]
