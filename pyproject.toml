@@ -3,7 +3,7 @@ authors = [
   {"name" = "seekplum", "email" = "1131909224m@sina.cn"}
 ]
 name = "fastmcp-openapi"
-version = "0.0.2"
+version = "0.0.3"
 description = "OpenAPI documentation and helper decorators for FastMCP servers"
 license = { text = "MIT" }
 dependencies = [
