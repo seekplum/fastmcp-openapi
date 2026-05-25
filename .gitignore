@@ -404,8 +404,3 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/python,visualstudiocode,node,macos,windows,linux
-
-# 环境变量脚本（含鉴权凭据）
-mcp-bootstrap/env.sh
-mcp-bootstrap/test.sh
-mcp-bootstrap/.env.*.sh

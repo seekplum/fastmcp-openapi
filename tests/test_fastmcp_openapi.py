@@ -783,10 +783,10 @@ def test_extractor_helpers_cover_edge_cases() -> None:
     def returns_plain() -> int:
         return 1
 
-    def no_return_annotation(value):
+    def no_return_annotation(value):  # type: ignore[no-untyped-def]
         return value
 
-    def broken_signature(*args, **kwargs):
+    def broken_signature(*args: Any, **kwargs: Any) -> tuple[tuple[Any, ...], dict[str, Any]]:
         return args, kwargs
 
     doc = """摘要。\n\nArgs:\n    first: 第一行\n      第二行\n\nReturns:\n    done\n"""

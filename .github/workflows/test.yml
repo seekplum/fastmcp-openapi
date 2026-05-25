@@ -1,0 +1,86 @@
+name: Test
+
+on:
+  pull_request: {}
+  push:
+    branches: master
+    tags: "*"
+
+permissions:
+  contents: read
+
+env:
+  LANG: "en_US.utf-8"
+  LC_ALL: "en_US.utf-8"
+  PRE_COMMIT_HOME: ${{ github.workspace }}/.cache/pre-commit
+  PYTHONIOENCODING: "UTF-8"
+  UV_VERSION: "0.11.7"
+  DEVBOX_VERSION: "0.17.1"
+
+jobs:
+  tests:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.13", "3.14", "3.15",]
+        os:
+          - macos-latest
+          - ubuntu-latest
+        include:
+          - os: macos-latest
+            pytest-xdist-maxprocesses: 3
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0 # Needs all tags to compute dynamic version
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          version: ${{ env.UV_VERSION }}
+          python-version: ${{ matrix.python-version }}
+          enable-cache: "true"
+          cache-suffix: ${{ matrix.python-version }}
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: uv sync --frozen
+      - name: Static type checker
+        run: uv run poe lint-mypy
+      - name: Code formatter checker
+        run: uv run poe lint-black
+      - name: Imports alphabetically checker
+        run: uv run poe lint-isort
+      - name: Style guide checker
+        run: uv run poe lint-flake8
+      - name: Static code analyser
+        run: uv run poe lint-pylint
+      - name: Security code checker
+        run: uv run poe lint-bandit
+      - name: Run Unittest
+        run: uv run poe test
+  devbox:
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-latest
+          - ubuntu-latest
+        include:
+          - os: macos-latest
+            pytest-xdist-maxprocesses: 3
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install devbox
+        uses: jetify-com/devbox-install-action@v0.15.0
+        with:
+          devbox-version: ${{ env.DEVBOX_VERSION }}
+          enable-cache: "true"
+      - run: devbox run -- uv run pre-commit run --all-files --show-diff-on-failure
+      - run: devbox run test

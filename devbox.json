@@ -1,0 +1,21 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.17.1/.schema/devbox.schema.json",
+  "packages": ["uv", "git@latest", "direnv@latest"],
+  "env": {
+    "LC_ALL": "C.UTF-8",
+    "LANG": "C.UTF-8",
+    "PYTHONPATH": "$PWD"
+  },
+  "shell": {
+    "init_hook": [
+      "uv sync --frozen",
+      "uv run pre-commit install",
+      "printf \"\\033[1;34m📦 Environment:\\033[0m %s | uv %s\\n\" \"$(uv run python --version 2>&1)\" \"$(uv --version | awk '{print $2}')\"",
+      "printf \"\\033[1;32m🚀 Poe Tasks:\\033[0m\"",
+      "printf \"\\tuv run poe { format | lint }\\n\""
+    ],
+    "scripts": {
+      "test": ["uv run poe test"]
+    }
+  }
+}

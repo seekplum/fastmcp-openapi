@@ -2,6 +2,8 @@
 
 `fastmcp-openapi` 为 FastMCP 服务提供 OpenAPI 文档生成、Swagger UI 页面、HTTP tool 代理路由，以及面向业务扩展的请求钩子封装。
 
+[![LICENSE](https://img.shields.io/github/license/seekplum/fastmcp-openapi.svg)](https://github.com/seekplum/fastmcp-openapi/blob/master/LICENSE)[![coveralls](https://coveralls.io/repos/github/seekplum/fastmcp-openapi/badge.svg?branch=master)](https://coveralls.io/github/seekplum/fastmcp-openapi?branch=master) [![pypi version](https://img.shields.io/pypi/v/fastmcp-openapi.svg)](https://pypi.python.org/pypi/fastmcp-openapi) [![pyversions](https://img.shields.io/pypi/pyversions/fastmcp-openapi.svg)](https://pypi.python.org/pypi/fastmcp-openapi)
+
 ## 核心能力
 
 - 在注册 `tool` 时提取参数、响应和描述信息，生成 OpenAPI 3.1 schema。
