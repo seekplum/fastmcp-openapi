@@ -196,6 +196,7 @@ def _mcp_tool(  # noqa: C901
 
         decorated = mcp.tool(*a, **kw)(wrapper)
         tool_name = _resolve_tool_name(func, a, kw)
+        logger.info("Registering tool: %s", tool_name)
         registered_tool = _build_registered_tool(wrapper, tool_name, kw)
         registry[tool_name] = build_tool_registry_entry(tool_name, registered_tool, func, wrapper, body_params)
         if on_registered is not None:
@@ -344,8 +345,10 @@ class FastMCPOpenAPI:
         path = build_tool_route_path(self.config.api_base, tool_name)
         registered_routes = self._get_registered_tool_proxy_routes()
         if path in registered_routes:
+            logger.warning("Tool proxy route already registered for path: %s", path)
             return
         registered_routes.add(path)
+        logger.info("Registering tool proxy route: %s -> %s", path, tool_name)
 
         @self.custom_route(path, methods=["GET", "POST"])
         async def call_tool_proxy(request: Request) -> Response:
@@ -353,13 +356,13 @@ class FastMCPOpenAPI:
 
     async def setup(self) -> None:
         if self.config.verbose:
-            print("[fastmcp_openapi] 开始注册 OpenAPI 路由…")
+            logger.info("[fastmcp_openapi] 开始注册 OpenAPI 路由…")
 
         registrar = RouteRegistrar(self.mcp, self.config, self._registry)
         registrar.register_all()
 
         if self.config.verbose:
-            print(
+            logger.info(
                 f"[fastmcp_openapi] 完成，共 {len(self._registry)} 个 tool。"
                 f" 文档：{self.config.base_url}{self.config.docs_ui_route}"
             )

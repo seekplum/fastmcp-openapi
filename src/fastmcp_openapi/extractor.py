@@ -259,9 +259,6 @@ def build_tool_registry_entry(  # pylint: disable=too-many-locals
     summary = doc_lines[0].rstrip("。.") if doc_lines else title
     openapi_description = "<br/>".join(doc_lines) if doc_lines else description or ""
     tag_descriptions: dict[str, str] = {}
-    if tool_name.startswith("shuiyin_"):
-        tags = ["水印相关接口"]
-        tag_descriptions["水印相关接口"] = "水印对应业务逻辑实现的相关接口"
 
     return {
         "name": tool_name,

@@ -727,7 +727,7 @@ def test_call_tool_proxy_custom_handler_can_return_plain_text_response() -> None
     assert response.media_type == "text/plain"
 
 
-def test_registry_entry_builder_handles_query_model_and_special_tags() -> None:
+def test_registry_entry_builder_handles_query_model_and_passed_tags() -> None:
     client = FakeClient()
 
     def shuiyin_query(req: object) -> QueryResponse:
@@ -742,7 +742,7 @@ def test_registry_entry_builder_handles_query_model_and_special_tags() -> None:
     tool = SimpleNamespace(
         description="tool-desc",
         tags={"raw"},
-        annotations=SimpleNamespace(title="水印查询"),
+        annotations=SimpleNamespace(title="xxx查询"),
         parameters={
             "properties": {
                 "req": {"$ref": "#/components/schemas/Req"},
@@ -754,12 +754,28 @@ def test_registry_entry_builder_handles_query_model_and_special_tags() -> None:
 
     info = build_tool_registry_entry("shuiyin_query", tool, shuiyin_query, shuiyin_query, {})
 
-    assert info["title"] == "水印查询"
-    assert info["tags"] == ["水印相关接口"]
-    assert info["tag_descriptions"]["水印相关接口"]
+    assert info["title"] == "xxx查询"
+    assert info["tags"] == ["raw"]
+    assert info["tag_descriptions"] == {}
     assert info["response_model_name"] == "QueryResponse"
     assert info["parameters"][0]["type"] == "Req"
     assert info["parameters"][1]["example"] == "high"
+
+
+def test_registry_entry_builder_uses_empty_tags_when_not_passed() -> None:
+    def shuiyin_query() -> QueryResponse:
+        return QueryResponse(ok=True)
+
+    tool = SimpleNamespace(
+        description="tool-desc",
+        annotations=None,
+        parameters={"properties": {}},
+    )
+
+    info = build_tool_registry_entry("shuiyin_query", tool, shuiyin_query, shuiyin_query, {})
+
+    assert info["tags"] == []
+    assert info["tag_descriptions"] == {}
 
 
 def test_extractor_helpers_cover_edge_cases() -> None:

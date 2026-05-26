@@ -1,5 +1,6 @@
 """FastMCP OpenAPI 路由注册"""
 
+import logging
 import re
 from typing import Any
 
@@ -10,6 +11,7 @@ from starlette.responses import HTMLResponse, JSONResponse, Response
 from .config import FastMCPOpenAPIConfig
 from .templates import get_docs_html, get_favicon_svg
 
+logger = logging.getLogger(__name__)
 OPENAPI3_REF_TEMPLATE = "#/components/schemas/{model}"
 
 
@@ -49,7 +51,7 @@ class RouteRegistrar:
         if self.config.favicon_url is None:
             self._register_favicon()
         if self.config.verbose:
-            print(
+            logger.info(
                 f"[fastmcp_openapi] 已注册路由："
                 f" {self.config.openapi_route}"
                 f" {self.config.docs_ui_route}"
