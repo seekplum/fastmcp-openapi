@@ -127,7 +127,7 @@ python -c "from fastmcp_openapi import FastMCPOpenAPI; print(FastMCPOpenAPI)"
 ## 当前仓库的注意点
 
 - 版本号以 [pyproject.toml](../pyproject.toml) 中的 `[project].version` 为准
-- 当前仓库的 `requires-python` 是 `>=3.13,<3.15`，锁文件也会按这个范围做解析；如果未来上游依赖尚未支持新 Python 小版本，先收紧版本范围再锁定，避免 `uv add` 或 `uv lock` 在非当前解释器版本上失败
+- 当前仓库的 `requires-python` 是 `>=3.12,<3.15`，锁文件也会按这个范围做解析；如果未来上游依赖尚未支持新 Python 小版本，先收紧版本范围再锁定，避免 `uv add` 或 `uv lock` 在非当前解释器版本上失败
 - 项目使用 `src/` 布局，发包时实际包含的是 `src/fastmcp_openapi`
 - 依赖解析默认配置了阿里云镜像用于安装依赖，但这不等同于发布目标仓库；发布成功后还要考虑镜像同步延迟
 - 在本仓库中执行 `uv add fastmcp-openapi==<version>` 会把当前项目当成外部依赖重新解析，既没有必要，也容易因为镜像未同步或版本重复而误判为发包失败

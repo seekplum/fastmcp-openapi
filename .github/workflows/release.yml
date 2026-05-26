@@ -7,7 +7,7 @@ on:
 
 env:
   # renovate: datasource=devbox depName=uv
-  UV_VERSION: "0.11.14"
+  UV_VERSION: "0.11.16"
 
 jobs:
   build:
@@ -39,6 +39,7 @@ jobs:
         run: uv build
 
       - name: Upload artifact containing distribution files
+        if: ${{ !env.ACT }}
         uses: actions/upload-artifact@v7
         with:
           name: dist
@@ -51,7 +52,7 @@ jobs:
     needs: [build]
     if: ${{ github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/') }}
     environment:
-      name: pypi-test
+      name: pypi_test
       url: https://test.pypi.org/p/fastmcp-openapi
     permissions:
       id-token: write

@@ -787,9 +787,6 @@ def test_extractor_helpers_cover_edge_cases() -> None:
     assert _parse_docstring_args("") == {}
     assert _normalize_schema_name("demo name/with space") == "demo_name_with_space"
 
-    class GenericResponse(BaseModel):
-        value: str
-
     class LocalModel(BaseModel):
         name: str
 

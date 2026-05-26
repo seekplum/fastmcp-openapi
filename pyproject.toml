@@ -11,10 +11,11 @@ dependencies = [
   "pydantic>=2.13.1",
   "starlette>=0.50.0"
 ]
-requires-python = ">=3.13,<3.15"
+requires-python = ">=3.12,<3.15"
 classifiers = [
   "Programming Language :: Python",
   "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14"
 ]
@@ -158,7 +159,7 @@ sort = "miss"
 source = "src"
 
 [tool.black]
-target-version = ['py313']
+target-version = ['py312']
 line-length = 120
 
 [tool.isort]
@@ -180,7 +181,7 @@ extend-immutable-calls = []
 [tool.ruff]
 line-length = 120
 exclude = [".git", ".venv"]
-target-version = "py313"
+target-version = "py312"
 
 [tool.ruff.lint]
 extend-select = ["I"]
@@ -231,7 +232,7 @@ ignore-words-list = 'ans'
 
 [tool.vulture]
 exclude = ["dos/", "examples/", ".venv/", ".git/"]
-ignore_decorators = ["@openapi.tool", "@mcp.custom_route"]
+ignore_decorators = ["@openapi.tool", "@openapi.custom_route"]
 ignore_names = []
 make_whitelist = true
 min_confidence = 60

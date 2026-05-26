@@ -313,4 +313,4 @@ def pyupgrade() -> None:
     files = tuple(line for line in result.stdout.splitlines() if line)
     if not files:
         return
-    _run(("uv", "tool", "run", "pyupgrade", "--py313-plus", "--exit-zero-even-if-changed", *files))
+    _run(("uv", "tool", "run", "pyupgrade", "--py312-plus", "--exit-zero-even-if-changed", *files))
