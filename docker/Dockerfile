@@ -6,7 +6,7 @@ FROM base AS compile-stage
 
 WORKDIR /code
 
-ADD pyproject.toml .
+ADD pyproject.toml uv.lock README.md .
 
 ENV PYTHONUNBUFFERED=1
 ENV TZ=Asia/Shanghai

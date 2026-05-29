@@ -2,6 +2,7 @@
 authors = [
   {"name" = "seekplum", "email" = "1131909224m@sina.cn"}
 ]
+readme = "README.md"
 name = "fastmcp-openapi"
 version = "0.0.4"
 description = "OpenAPI documentation and helper decorators for FastMCP servers"
@@ -20,6 +21,11 @@ classifiers = [
   "Programming Language :: Python :: 3.14"
 ]
 
+[tool.hatch.build.targets.sdist]
+exclude = [
+  "/.devbox",
+]
+
 [tool.hatch.build.targets.wheel]
 packages = ["src/fastmcp_openapi"]
 
@@ -33,11 +39,11 @@ build-backend = "hatchling.build"
 [project.scripts]
 
 [project.urls]
-Homepage = "https://github.com/seekplum/fastmcp_openapi"
-Documentation = "https://github.com/seekplum/fastmcp_openapi"
-Repository = "https://github.com/seekplum/fastmcp_openapi.git"
-"Bug Tracker" = "https://github.com/seekplum/fastmcp_openapi/issues"
-Changelog = "https://github.com/seekplum/fastmcp_openapi/blob/master/CHANGELOG.md"
+Homepage = "https://github.com/seekplum/fastmcp-openapi"
+Documentation = "https://github.com/seekplum/fastmcp-openapi"
+Repository = "https://github.com/seekplum/fastmcp-openapi.git"
+"Bug Tracker" = "https://github.com/seekplum/fastmcp-openapi/issues"
+Changelog = "https://github.com/seekplum/fastmcp-openapi/blob/master/CHANGELOG.md"
 
 
 [dependency-groups]
