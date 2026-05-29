@@ -241,6 +241,11 @@ def format(sources: str = "") -> None:  # noqa
 
 
 def test() -> None:  # noqa
+    pytest_args = tuple(sys.argv[1:])
+    if pytest_args:
+        _run(("pytest", *pytest_args))
+        return
+
     _run(
         (
             "pytest",
