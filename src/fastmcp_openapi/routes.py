@@ -25,9 +25,9 @@ def build_tool_route_path(api_base: str, tool_name: str) -> str:
 
 class ValidationErrorModel(BaseModel):
     type: str = Field(..., title="Error Type", description="A computer-readable identifier of the error type.")
-    loc: list[Any] = Field(..., title="Location", description="The error's location as a list.")
-    msg: str = Field(..., title="Message", description="A human readable explanation of the error.")
-    input: Any = Field(..., title="Input", description="The input provided for validation.")
+    loc: list[Any] = Field(..., title="Location", description="The error's location as a list.")  # noqa
+    msg: str = Field(..., title="Message", description="A human readable explanation of the error.")  # noqa
+    input: Any = Field(..., title="Input", description="The input provided for validation.")  # noqa
     url: str | None = Field(default=None, title="URL", description="The URL to further information about the error.")
     ctx: dict[str, Any] | None = Field(
         default=None,
@@ -63,7 +63,7 @@ class RouteRegistrar:
     # ------------------------------------------------------------------
 
     def _register_openapi(self) -> None:
-        @self.mcp.custom_route(self.config.openapi_route, methods=["GET", "OPTIONS"])
+        @self.mcp.custom_route(self.config.openapi_route, methods=["GET", "OPTIONS"])  # noqa
         async def openapi_json(request: Request) -> Response:
             if request.method == "OPTIONS":
                 return JSONResponse({}, headers=self._cors_headers())
@@ -73,13 +73,13 @@ class RouteRegistrar:
             return JSONResponse(schema, headers=headers)
 
     def _register_docs_ui(self) -> None:
-        @self.mcp.custom_route(self.config.docs_ui_route, methods=["GET"])
+        @self.mcp.custom_route(self.config.docs_ui_route, methods=["GET"])  # noqa
         async def docs_ui(_request: Request) -> Response:
             html = get_docs_html(self.config)
             return HTMLResponse(html)
 
     def _register_api_tools(self) -> None:
-        @self.mcp.custom_route(self.config.api_tools_route, methods=["GET"])
+        @self.mcp.custom_route(self.config.api_tools_route, methods=["GET"])  # noqa
         async def api_tools(_request: Request) -> Response:
             return JSONResponse(
                 {

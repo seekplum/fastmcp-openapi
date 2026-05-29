@@ -44,7 +44,7 @@ class ItemResponse(BaseModel):
 
 
 class QueryResponse(BaseModel):
-    ok: bool
+    ok: bool  # noqa
 
 
 class NestedModel(BaseModel):
@@ -52,12 +52,12 @@ class NestedModel(BaseModel):
 
 
 class ModelWithFactory(BaseModel):
-    required_name: str
+    required_name: str  # noqa
     nested: NestedModel = Field(default_factory=lambda: NestedModel(value="factory"))
 
 
 class FakeClient:
-    def query(self, req: object, response_model: type[BaseModel] | str, flag: bool = False) -> None:
+    def query(self, req: object, response_model: type[BaseModel] | str, flag: bool = False) -> None:  # noqa
         return None
 
 
@@ -151,7 +151,7 @@ def test_setup_does_not_depend_on_list_tools() -> None:
     async def fail_list_tools(*, run_middleware: bool = True) -> Sequence[Any]:
         raise AssertionError(f"setup() 不应再调用 list_tools: {run_middleware}")
 
-    mcp.list_tools = fail_list_tools  # type: ignore[assignment]
+    mcp.list_tools = fail_list_tools  # type: ignore[assignment]  # noqa
     openapi = FastMCPOpenAPI(mcp)
 
     @openapi.tool()

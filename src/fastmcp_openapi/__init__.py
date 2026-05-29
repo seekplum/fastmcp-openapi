@@ -180,7 +180,7 @@ def _mcp_tool(  # noqa: C901
             return await func(ctx, *args, **kwargs)
 
         if flat_sig is not None:
-            wrapper.__signature__ = flat_sig  # type: ignore[attr-defined]
+            wrapper.__signature__ = flat_sig  # type: ignore[attr-defined]  # noqa
             new_annotations: dict[str, t.Any] = {
                 parameter.name: parameter.annotation
                 for parameter in flat_sig.parameters.values()
@@ -188,7 +188,7 @@ def _mcp_tool(  # noqa: C901
             }
             if flat_sig.return_annotation is not inspect.Signature.empty:
                 new_annotations["return"] = flat_sig.return_annotation
-            wrapper.__annotations__ = new_annotations
+            wrapper.__annotations__ = new_annotations  # noqa
             try:
                 del wrapper.__wrapped__  # type: ignore[attr-defined]
             except AttributeError:
@@ -265,11 +265,11 @@ class FastMCPOpenAPI:
         self._before_request_handlers: list[BeforeRequestHandler] = []
         self._after_request_handlers: list[AfterRequestHandler] = []
 
-    def before_request(self, func: BeforeRequestHandler) -> BeforeRequestHandler:
+    def before_request(self, func: BeforeRequestHandler) -> BeforeRequestHandler:  # noqa
         self._before_request_handlers.append(func)
         return func
 
-    def after_request(self, func: AfterRequestHandler) -> AfterRequestHandler:
+    def after_request(self, func: AfterRequestHandler) -> AfterRequestHandler:  # noqa
         self._after_request_handlers.append(func)
         return func
 
@@ -307,7 +307,7 @@ class FastMCPOpenAPI:
             return
         setattr(self.mcp, _STATUS_ROUTE_MARKER, True)
 
-        @self.custom_route(self.config.status_route, methods=["GET", "POST"])
+        @self.custom_route(self.config.status_route, methods=["GET", "POST"])  # noqa
         async def status(_request: Request) -> PlainTextResponse:
             return PlainTextResponse("OK")
 
@@ -350,7 +350,7 @@ class FastMCPOpenAPI:
         registered_routes.add(path)
         logger.info("Registering tool proxy route: %s -> %s", path, tool_name)
 
-        @self.custom_route(path, methods=["GET", "POST"])
+        @self.custom_route(path, methods=["GET", "POST"])  # noqa
         async def call_tool_proxy(request: Request) -> Response:
             return await self._call_tool_proxy(request, tool_name)
 

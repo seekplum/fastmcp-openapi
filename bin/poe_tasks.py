@@ -116,7 +116,7 @@ def _find_delete(names: Iterable[str], *, recursive: bool) -> None:
     _run((*_FIND_BASE, "(", *expr, ")", "-exec", "rm", rm_flag, "{}", "+"))
 
 
-def generate_poe_config() -> dict[str, t.Any]:
+def generate_poe_config() -> dict[str, t.Any]:  # noqa
     tasks: dict[str, dict[str, t.Any]] = {}
 
     for task_name, help_text, function_name in _SOURCE_TASKS:
@@ -191,11 +191,11 @@ def lint_codespell(sources: str = "") -> None:
     _run(("codespell", *_source_args(sources)))
 
 
-def lint_vulture(sources: str = "") -> None:
+def lint_vulture(sources: str = "") -> None:  # noqa
     _run(("vulture", *_source_args(sources)))
 
 
-def lint(sources: str = "") -> None:
+def lint(sources: str = "") -> None:  # noqa
     lint_codespell(sources)
     lint_mypy(sources)
     lint_black(sources)
@@ -204,6 +204,7 @@ def lint(sources: str = "") -> None:
     lint_ruff(sources)
     lint_pylint(sources)
     lint_bandit(sources)
+    lint_vulture(sources)
 
 
 def format_autoflake(sources: str = "") -> None:
@@ -232,14 +233,14 @@ def format_ruff(sources: str = "") -> None:
     _run(("ruff", "format", *_source_args(sources)))
 
 
-def format(sources: str = "") -> None:
+def format(sources: str = "") -> None:  # noqa
     format_autoflake(sources)
     format_isort(sources)
     format_black(sources)
     format_ruff(sources)
 
 
-def test() -> None:
+def test() -> None:  # noqa
     _run(
         (
             "pytest",
@@ -289,21 +290,21 @@ def clean_test() -> None:
     _find_delete(tmp_dirs, recursive=True)
 
 
-def clean() -> None:
+def clean() -> None:  # noqa
     clean_pyc()
     clean_test()
 
 
-def upgrade_deps() -> None:
+def upgrade_deps() -> None:  # noqa
     _run(("uv", "lock", "--upgrade"))
 
 
-def upgrade_pkg(pkg: str = "") -> None:
+def upgrade_pkg(pkg: str = "") -> None:  # noqa
     normalized_pkg = _validate_package_name(pkg)
     _run(("uv", "add", normalized_pkg, "--upgrade-package", normalized_pkg))
 
 
-def pyupgrade() -> None:
+def pyupgrade() -> None:  # noqa
     result = _run(
         ("fd", "-e", "py", "-t", "f", "-E", ".venv", "-E", ".git"),
         check=True,
