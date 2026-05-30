@@ -18,7 +18,7 @@ from .config import FastMCPOpenAPIConfig
 from .extractor import build_tool_registry_entry
 from .routes import RouteRegistrar, build_tool_route_path
 
-__version__ = "1.0.0"
+__version__ = "0.0.5"
 __all__ = [
     "AfterRequestHandler",
     "BeforeRequestHandler",
